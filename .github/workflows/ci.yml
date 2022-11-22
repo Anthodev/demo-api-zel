@@ -3,10 +3,27 @@ name: CI
 on:
   pull_request:
 
+env:
+  DB_USER: ${{ secrets.DB_USER }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_NAME: ${{ secrets.DB_NAME }}
+
 jobs:
   build:
     name: CI
     runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: $DB_USER
+          POSTGRES_PASSWORD: $DB_PASSWORD
+          POSTGRES_DB: $DB_NAME
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -21,26 +38,17 @@ jobs:
 
       - name: Get composer cache directory
         id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        run: echo "composer-cache-dir=$(composer config cache-files-dir)" >> $GITHUB_ENV
 
       - name: Cache multiple paths
         uses: actions/cache@v2
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
+          path: ${{ env.composer-cache-dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
       - name: "Composer install"
         run: composer install --no-interaction --no-progress
-
-      # Install Symfony CLI
-      - name: Symfony CLI
-        run: |
-          curl -sS https://get.symfony.com/cli/installer | bash
-          mv /home/runner/.symfony/bin/symfony /usr/local/bin/symfony
-      # Check vulnerabilities
-      - name: Symfony Check Vulnerabilities
-        run: symfony check:security
 
       - name: Static Analysis
         run: make stan
@@ -48,5 +56,10 @@ jobs:
       - name: Lint Doctrine entities
         run: ./bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
 
+      - name: Generate JWT keys
+        run: make generate-jwt
+
       - name: Tests
-        run: make test
+        run: make test-all
+        env:
+          DATABASE_URL: "postgresql://$DB_USER:$DB_PASSWORD@localhost:5432/$DB_NAME"
