@@ -10,11 +10,11 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20221122131727 extends AbstractMigration
+final class Version20221122173813 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'User and role tables creation';
     }
 
     public function up(Schema $schema): void
@@ -26,7 +26,7 @@ final class Version20221122131727 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_57698A6AEA750E8 ON role (label)');
         $this->addSql('COMMENT ON COLUMN role.uuid IS \'(DC2Type:uuid)\'');
         $this->addSql('COMMENT ON COLUMN role.created_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE users (id SERIAL NOT NULL, role_id INT NOT NULL, email VARCHAR(255) NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, img_path VARCHAR(255) DEFAULT NULL, uuid UUID NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT \'NOW()\' NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE users (id SERIAL NOT NULL, role_id INT NOT NULL, email VARCHAR(255) NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, uuid UUID NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT \'NOW()\' NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, deleted_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9E7927C74 ON users (email)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9D17F50A6 ON users (uuid)');
         $this->addSql('CREATE INDEX IDX_1483A5E9D60322AC ON users (role_id)');

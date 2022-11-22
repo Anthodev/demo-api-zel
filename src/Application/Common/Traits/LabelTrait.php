@@ -6,12 +6,14 @@ namespace App\Application\Common\Traits;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait LabelTrait
 {
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
+    #[Groups('read')]
     #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
     private string $label;
 

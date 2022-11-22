@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Application\Common\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -13,6 +14,7 @@ trait UuidTrait
     #[Assert\NotBlank(
         groups: ['read'],
     )]
+    #[Groups('read')]
     #[ORM\Column(type: 'uuid', unique: true, nullable: false)]
     private ?Uuid $uuid = null;
 

@@ -14,7 +14,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 /**
  * Base builder for building generic entities object, should be used by any concrete Entity builder in application.
  */
-class BaseBuilder implements BuilderInterface
+class BaseBaseBuilder implements BaseBuilderInterface
 {
     #[Required]
     public LoggerInterface $logger;
