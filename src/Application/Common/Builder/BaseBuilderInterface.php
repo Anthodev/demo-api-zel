@@ -9,7 +9,7 @@ use App\Application\Common\Exception\BuilderError;
 /**
  * Interface for AbstractBaseBuilder.
  */
-interface BuilderInterface
+interface BaseBuilderInterface
 {
     /**
      * Build an object from input data.

@@ -15,12 +15,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'users')]
 #[ORM\Cache]
 #[ORM\HasLifecycleCallbacks]
+#[UniqueEntity('uuid')]
 #[UniqueEntity('email')]
 class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -32,16 +34,19 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     #[Assert\Email,
         Assert\NotBlank,
         Assert\Length(max: 255)]
+    #[Groups('read')]
     #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
     private string $email;
 
     #[Assert\Type(Types::STRING),
         Assert\NotBlank,
         Assert\Length(max: 255)]
+    #[Groups('read')]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private string $username;
 
     #[Assert\NotNull]
+    #[Groups('read')]
     #[ORM\ManyToOne(targetEntity: Role::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Role $role;
@@ -54,10 +59,6 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
 
     #[Assert\Length(max: 255)]
     private ?string $plainPassword = null;
-
-    #[Assert\Length(max: 255)]
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $imgPath = null;
 
     public function getEmail(): string
     {
@@ -91,18 +92,6 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     public function setPlainPassword(?string $plainPassword): self
     {
         $this->plainPassword = $plainPassword;
-
-        return $this;
-    }
-
-    public function getImgPath(): ?string
-    {
-        return $this->imgPath;
-    }
-
-    public function setImgPath(?string $imgPath): self
-    {
-        $this->imgPath = $imgPath;
 
         return $this;
     }

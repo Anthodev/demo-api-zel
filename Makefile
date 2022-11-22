@@ -101,8 +101,10 @@ generate-jwt: ## Generate private and public keys
 	$(CONSOLE) lexik:jwt:generate-keypair --overwrite -q $c
 
 ## —— Tests ✅ ————————————————————————————————————————————————————————————
-test-database: reset-database ### load database schema
-	#$(CONSOLE_TEST) doctrine:fixtures:load -n
+test-database: ### load database schema
+	$(CONSOLE_TEST) doctrine:database:drop --if-exists --force
+	$(CONSOLE_TEST) doctrine:database:create --if-not-exists
+	$(CONSOLE_TEST) doctrine:migration:migrate -n --all-or-nothing
 
 pest:
 	$(PHP_TEST) ./vendor/bin/pest

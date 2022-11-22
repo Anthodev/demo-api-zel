@@ -23,6 +23,10 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Domain/User/Entity'
                 prefix: 'App\Domain\User\Entity'
                 alias: User
+        filters:
+            softDeleted:
+                class: 'App\Application\Common\Doctrine\Filter\SoftDeletedFilter'
+                enabled: true
 
 when@test:
     doctrine:

@@ -53,13 +53,6 @@ class UserFactory implements FactoryInterface
             $user->setUuid($uuid);
         }
 
-        if (isset($input['imgPath'])) {
-            /** @var string $imgPath */
-            $imgPath = $input['imgPath'];
-
-            $user->setImgPath($imgPath);
-        }
-
         return $user;
     }
 }
