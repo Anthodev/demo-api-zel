@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   php:
-    container_name: symfony-php
+    container_name: ${PROJECT_NAME}-php
     build:
       context: .
       target: app_php
@@ -11,9 +11,13 @@ services:
         STABILITY: ${STABILITY:-stable}
         USER_ID: ${USER_ID:-1000}
         GROUP_ID: ${GROUP_ID:-1000}
+    depends_on:
+      - database
     restart: unless-stopped
     volumes:
       - php_socket:/var/run/php
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
     healthcheck:
       interval: 10s
       timeout: 3s
@@ -23,7 +27,11 @@ services:
       USER_ID: ${USER_ID:-1000}
       GROUP_ID: ${GROUP_ID:-1000}
       # Run "composer require symfony/orm-pack" to install and configure Doctrine ORM
-      DATABASE_URL: postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-app}?serverVersion=${POSTGRES_VERSION:-14}
+      DATABASE_DB: ${DATABASE_DB:-zel}
+      DATABASE_HOST: ${DATABASE_HOST:-db}
+      DATABASE_USER: ${DATABASE_USER:-symfony}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-symfony}
+      DATABASE_URL: postgresql://${DATABASE_USER:-app}:${DATABASE_PASSWORD:-!ChangeMe!}@${DATABASE_HOST}:5432/${DATABASE_DB:-app}?serverVersion=${POSTGRES_VERSION:-14}
       # Run "composer require symfony/mercure-bundle" to install and configure the Mercure integration
       MERCURE_URL: ${CADDY_MERCURE_URL:-http://caddy/.well-known/mercure}
       MERCURE_PUBLIC_URL: https://${SERVER_NAME:-localhost}/.well-known/mercure
@@ -64,9 +72,27 @@ services:
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
 
+###> doctrine/doctrine-bundle ###
+  database:
+    image: postgres:${POSTGRES_VERSION:-14}-alpine
+    environment:
+      POSTGRES_DB: ${DATABASE_DB:-app}
+      # You should definitely change the password in production
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-!ChangeMe!}
+      POSTGRES_USER: ${DATABASE_USER:-app}
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw
+      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+      # - ./docker/db/data:/var/lib/postgresql/data:rw
+###< doctrine/doctrine-bundle ###
+
 volumes:
   php_socket:
   caddy_data:
   caddy_config:
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
+
+###> doctrine/doctrine-bundle ###
+  db-data:
+###< doctrine/doctrine-bundle ###
