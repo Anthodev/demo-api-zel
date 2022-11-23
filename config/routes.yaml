@@ -6,3 +6,8 @@ user_controller:
     resource: ../src/Domain/User/Controller/
     type: attribute
     prefix: /api
+
+article_controller:
+    resource: ../src/Domain/Article/Controller/
+    type: attribute
+    prefix: /api

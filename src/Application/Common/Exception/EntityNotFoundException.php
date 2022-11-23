@@ -6,12 +6,21 @@ namespace App\Application\Common\Exception;
 
 use Doctrine\ORM\EntityNotFoundException as DoctrineEntityNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
-class EntityNotFoundException extends DoctrineEntityNotFoundException
+class EntityNotFoundException extends DoctrineEntityNotFoundException implements HttpExceptionInterface
 {
-    public function __construct(string $message = "", ?Throwable $previous = null)
+    public function getStatusCode(): int
     {
-        parent::__construct($message, Response::HTTP_NOT_FOUND, $previous);
+        return Response::HTTP_NOT_FOUND;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @return array<string, string>
+     */
+    public function getHeaders(): array
+    {
+        return [];
     }
 }

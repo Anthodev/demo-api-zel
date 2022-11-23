@@ -5,12 +5,22 @@ declare(strict_types=1);
 namespace App\Application\Common\Exception;
 
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
-class ApplicationException extends \Exception
+class ApplicationException extends \Exception implements HttpExceptionInterface
 {
-    public function __construct(string $message = '', int $code = Response::HTTP_INTERNAL_SERVER_ERROR, ?Throwable $previous = null)
+    public function getStatusCode(): int
     {
-        parent::__construct($message, $code, $previous);
+        return Response::HTTP_INTERNAL_SERVER_ERROR;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return array<string, mixed>
+     */
+    public function getHeaders(): array
+    {
+        return [];
     }
 }

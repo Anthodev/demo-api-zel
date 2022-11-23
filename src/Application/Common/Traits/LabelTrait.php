@@ -13,7 +13,7 @@ trait LabelTrait
 {
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
-    #[Groups('read')]
+    #[Groups(['all:read'])]
     #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
     private string $label;
 

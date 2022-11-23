@@ -82,11 +82,11 @@ abstract class AbstractFetcher implements FetcherInterface
         return $entity;
     }
 
-    public function find(string|Uuid $id, bool $disableSoftDeleteFilter = false): ?EntityInterface
+    public function find(int|string|Uuid $id, bool $disableSoftDeleteFilter = false): ?EntityInterface
     {
         $criteria = match (true) {
-            $id instanceof Uuid => ['id' => $id],
-            default => ['id' => new Uuid($id)],
+            $id instanceof Uuid, is_string($id) => ['uuid' => $id],
+            default => ['id' => $id],
         };
 
         if ($disableSoftDeleteFilter) {

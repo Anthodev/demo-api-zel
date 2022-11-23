@@ -37,4 +37,9 @@ class ValidationException extends ApplicationException
 
         return $this->errors;
     }
+
+    public function getStatusCode(): int
+    {
+        return Response::HTTP_UNPROCESSABLE_ENTITY;
+    }
 }

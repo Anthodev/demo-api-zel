@@ -6,15 +6,16 @@ namespace App\Application\Common\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 trait UuidTrait
 {
     #[Assert\NotBlank(
-        groups: ['read'],
+        groups: ['all:read'],
     )]
-    #[Groups('read')]
+    #[Groups(['all:read'])]
     #[ORM\Column(type: 'uuid', unique: true, nullable: false)]
     private ?Uuid $uuid = null;
 
@@ -30,6 +31,7 @@ trait UuidTrait
         return $this;
     }
 
+    #[Ignore]
     #[ORM\PrePersist]
     public function setDefaultUuid(): static
     {

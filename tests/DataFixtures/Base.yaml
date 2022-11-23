@@ -5,3 +5,9 @@ App\Domain\User\Entity\User:
         username: "admin"
         password: "Test@1234"
         role: "@role_admin"
+    user1_user:
+        uuid: "ec10a3c0-ded7-4c06-b569-a2d313f83910"
+        email: "user1@test.io"
+        username: "user1"
+        password: "Test@1234"
+        role: "@role_user"

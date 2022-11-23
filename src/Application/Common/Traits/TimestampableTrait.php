@@ -6,12 +6,15 @@ namespace App\Application\Common\Traits;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 trait TimestampableTrait
 {
+    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ['default' => 'NOW()'])]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 

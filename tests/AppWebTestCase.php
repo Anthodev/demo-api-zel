@@ -27,6 +27,7 @@ class AppWebTestCase extends WebTestCase
 
     protected static ?KernelBrowser $client;
     protected static string $uri = '/api';
+    protected string $dataFixtureDir;
 
     /**
      * @throws Exception
@@ -34,6 +35,9 @@ class AppWebTestCase extends WebTestCase
     protected function setUp(): void
     {
         static::$client = static::createClient();
+
+        /** @phpstan-ignore-next-line */
+        $this->dataFixtureDir = static::$client->getContainer()->getParameter('kernel.project_dir') . '/tests/DataFixtures';
     }
 
     protected function tearDown(): void
@@ -90,6 +94,10 @@ class AppWebTestCase extends WebTestCase
         /** @var stdClass $response */
         $response = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
 
+        if (is_array($response)) {
+            return $response;
+        }
+
         static::assertObjectNotHasAttribute(
             'errors',
             $response,
@@ -135,7 +143,13 @@ class AppWebTestCase extends WebTestCase
         /** @var array<string, mixed> $response */
         $response = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
 
-        static::assertArrayNotHasKey('errors', $response);
+        if (isset($response['title'])) {
+            static::assertNotSame('An error occurred', $response['title']);
+        } elseif (isset($response['status'])) {
+            static::assertNotContains(substr((string) $response['status'], 0, 1), ['4', '5']);
+        } else {
+            static::assertArrayNotHasKey('errors', $response);
+        }
 
         return $response;
     }

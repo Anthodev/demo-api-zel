@@ -17,38 +17,29 @@ class UserFactory implements FactoryInterface
         $faker = Factory::create();
 
         /** @var string $email */
-        $email = $input['email'] ?? $faker->email;
+        $email = $input['email'] ?? $faker->email();
 
         /** @var string $username */
-        $username = $input['username'] ?? $faker->userName;
+        $username = $input['username'] ?? $faker->userName();
 
         /** @var Role $role */
-        $role = $input['role'];
+        $role = $input['role'] ?? new Role();
 
         /** @var string $password */
-        $password = $input['password'] ?? $faker->password;
+        $password = $input['password'] ?? $faker->password();
 
         $user = new User();
 
-        if (isset($input['email'])) {
-            $user->setEmail($email);
-        }
+        $user->setEmail($email);
 
-        if (isset($input['username'])) {
-            $user->setUsername($username);
-        }
+        $user->setUsername($username);
 
-        if (isset($input['role'])) {
-            $user->setRole($role);
-        }
+        $user->setRole($role);
 
-        if (isset($input['password'])) {
-            $user->setPlainPassword($password);
-        }
+        $user->setPlainPassword($password);
 
-        if (isset($input['uuid'])) {
-            /** @var Uuid $uuid */
-            $uuid = $input['uuid'];
+        if (!isset($input['uuid'])) {
+            $uuid = Uuid::v4();
 
             $user->setUuid($uuid);
         }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Builder;
 
-use App\Application\Common\Builder\BaseBaseBuilder;
+use App\Application\Common\Builder\BaseBuilder;
 use App\Application\Common\Exception\EntityNotFoundException;
 use App\Application\Common\Exception\InvalidArgumentException;
 use App\Domain\User\Dto\UserRegistrationInputDto;
@@ -16,7 +16,7 @@ use App\Domain\User\Fetcher\UserFetcherInterface;
 use App\Domain\User\Service\HashPassword;
 use Symfony\Contracts\Service\Attribute\Required;
 
-class UserBuilder extends BaseBaseBuilder implements UserBaseBuilderInterface
+class UserBuilder extends BaseBuilder implements UserBaseBuilderInterface
 {
     #[Required]
     public UserFetcherInterface $userFetcher;
