@@ -5,28 +5,22 @@ declare(strict_types=1);
 namespace App\Application\Common\Exception;
 
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
-class BuilderError extends \LogicException implements ApplicationExceptionInterface
+class BuilderError extends \LogicException implements HttpExceptionInterface
 {
-    /**
-     * @param string[] $fields
-     */
-    public function __construct(string $message = '', private array $fields = [], ?Throwable $previous = null)
+    public function getStatusCode(): int
     {
-        parent::__construct($message, Response::HTTP_BAD_REQUEST, $previous);
+        return Response::HTTP_BAD_REQUEST;
     }
 
     /**
-     * @return string[]
+     * {@inheritDoc}
+     *
+     * @return array<string, mixed>
      */
-    public function getFields(): array
+    public function getHeaders(): array
     {
-        return $this->fields;
-    }
-
-    public function getType(): TypeExceptionEnum
-    {
-        return TypeExceptionEnum::Internal;
+        return [];
     }
 }

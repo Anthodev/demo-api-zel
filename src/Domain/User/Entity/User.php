@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -34,29 +35,31 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     #[Assert\Email,
         Assert\NotBlank,
         Assert\Length(max: 255)]
-    #[Groups('read')]
+    #[Groups(['user:read'])]
     #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
     private string $email;
 
     #[Assert\Type(Types::STRING),
         Assert\NotBlank,
         Assert\Length(max: 255)]
-    #[Groups('read')]
+    #[Groups(['user:read', 'article:read'])]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private string $username;
 
     #[Assert\NotNull]
-    #[Groups('read')]
+    #[Groups(['user:read'])]
     #[ORM\ManyToOne(targetEntity: Role::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Role $role;
 
+    #[Ignore]
     #[Assert\Type(Types::STRING)]
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
     #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $password = null;
 
+    #[Ignore]
     #[Assert\Length(max: 255)]
     private ?string $plainPassword = null;
 

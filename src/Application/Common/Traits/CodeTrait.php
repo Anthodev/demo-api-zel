@@ -16,7 +16,7 @@ trait CodeTrait
         pattern: '/^\w+$/',
         message: 'Only letter, digit and underscore are allowed.'
     )]
-    #[Groups('read')]
+    #[Groups(['all:read'])]
     #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: false)]
     private string $code;
 

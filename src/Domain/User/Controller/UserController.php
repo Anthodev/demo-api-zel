@@ -10,6 +10,8 @@ use App\Application\Common\Exception\InvalidArgumentException;
 use App\Application\Common\Manager\BaseManagerInterface;
 use App\Domain\User\Builder\UserBaseBuilderInterface;
 use App\Domain\User\Dto\UserRegistrationInputDto;
+use App\Domain\User\Entity\User;
+use App\Domain\User\Enum\UserSerializerGroupsEnum;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -48,7 +50,7 @@ class UserController extends AbstractApplicationController
 
         $baseManager->insert($user);
 
-        return $this->output($user);
+        return $this->output($user, groups: UserSerializerGroupsEnum::toArray());
     }
 
     /**
@@ -62,6 +64,17 @@ class UserController extends AbstractApplicationController
     public function me(): Response
     {
         /** @phpstan-ignore-next-line */
-        return $this->output($this->getUser());
+        return $this->output($this->getUser(), groups: UserSerializerGroupsEnum::toArray());
+    }
+
+    #[Route(
+        path: '/user/{uuid}',
+        name: 'user_get',
+        methods: [Request::METHOD_GET]
+    )]
+    public function user(
+        User $user,
+    ): Response {
+        return $this->output($user, groups: UserSerializerGroupsEnum::toArray());
     }
 }

@@ -4,4 +4,7 @@ parameters:
         - src
         - tests
 
+    ignoreErrors:
+     - '#Strict comparison using === between null and [a-zA-Z0-9\\_]+ will always evaluate to false.#'
+
     checkGenericClassInNonGenericObjectType: false

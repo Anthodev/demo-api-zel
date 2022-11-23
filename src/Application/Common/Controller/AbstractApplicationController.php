@@ -6,12 +6,17 @@ namespace App\Application\Common\Controller;
 
 use const JSON_THROW_ON_ERROR;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
+use Symfony\Component\Serializer\SerializerInterface;
+
+use Symfony\Contracts\Service\Attribute\Required;
 
 abstract class AbstractApplicationController extends AbstractController
 {
+    #[Required]
+    public SerializerInterface $serializer;
+
     /**
      * @return array<string, mixed>
      * @throws \JsonException
@@ -23,18 +28,21 @@ abstract class AbstractApplicationController extends AbstractController
     }
 
     /**
+     * @param list<object>|object $data
      * @param array<string, mixed> $context
+     * @param list<string> $groups
      */
-    public function output(object $data, array $context = [], bool $forceObject = false): JsonResponse
-    {
-        if (count($context) === 0) {
-            $context = $this->defaultOutputContext();
-        }
+    public function output(
+        object|array $data,
+        array $context = [],
+        array $groups = [],
+    ): Response {
+        $groups = array_merge($groups, ['all:read']);
 
-        if ($forceObject) {
-            $dataJson = \json_encode($data, JSON_THROW_ON_ERROR | JSON_FORCE_OBJECT);
-            return $this->json($dataJson, context: $context);
-        }
+        $context[] = (new ObjectNormalizerContextBuilder())
+            ->withGroups($groups)
+            ->toArray()
+        ;
 
         return $this->json($data, context: $context);
     }
@@ -47,16 +55,5 @@ abstract class AbstractApplicationController extends AbstractController
         return (new ObjectNormalizerContextBuilder())
             ->withGroups($groups)
         ;
-    }
-
-    /**
-     * @return list<ObjectNormalizerContextBuilder>
-     */
-    private function defaultOutputContext(): array
-    {
-        return [
-            (new ObjectNormalizerContextBuilder())
-                ->withGroups(['read'])
-        ];
     }
 }

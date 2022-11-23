@@ -6,9 +6,11 @@ namespace App\Application\Common\Traits;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 trait SoftDeletableTrait
 {
+    #[Ignore]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deletedAt = null;
 
@@ -22,13 +24,5 @@ trait SoftDeletableTrait
     public function getDeletedAt(): ?\DateTimeInterface
     {
         return $this->deletedAt;
-    }
-
-    /** @deprecated */
-    public function setDeletedAtNull(): static
-    {
-        $this->deletedAt = null;
-
-        return $this;
     }
 }
