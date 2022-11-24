@@ -19,6 +19,9 @@ ifeq ($(isContainerRunning), 1)
 endif
 
 ## —— App ————————————————————————————————————————————————————————————————
+network:
+	@docker network create zel-network
+
 build-docker:
 	@docker-compose pull --ignore-pull-failures
 	@docker-compose build --no-cache
@@ -27,6 +30,8 @@ up:
 	@echo "Launching containers from project..."
 	$(DOCKER_COMPOSE) up -d
 	$(DOCKER_COMPOSE) ps
+
+up-all: network up
 
 stop:
 	@echo "Stopping containers from project..."
