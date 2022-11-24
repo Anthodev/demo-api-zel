@@ -20,7 +20,7 @@ endif
 
 ## —— App ————————————————————————————————————————————————————————————————
 network:
-	@docker network create zel_network
+	@docker network create zel_network || true
 
 build-docker: env network
 	@docker-compose pull --ignore-pull-failures
@@ -31,7 +31,7 @@ up:
 	$(DOCKER_COMPOSE) up -d
 	$(DOCKER_COMPOSE) ps
 
-build-up: build-docker up reset-permissions install-project
+build-up: build-docker up
 
 stop:
 	@echo "Stopping containers from project..."
@@ -46,15 +46,14 @@ prune: stop
 serve:
 	$(DOCKER) symfony serve -d
 
+bash:
+	@docker exec -it $(containerName) bash
+
 install-project: install reset-database generate-jwt ## First installation for setup the project
 
 update-project: install reset-database ## update the project after a checkout on another branch or to reset the state of the project
 
 sync: update-project test-all ## Synchronize the project with the current branch, install composer dependencies, drop DB and run all migrations, fixtures and all test
-
-reset-permissions:
-	$(DOCKER) chown -R $(user):$(group) ./var
-	$(DOCKER) chown -R $(user):$(group) ./vendor
 
 ## —— 🐝 The Symfony Makefile 🐝 ——————————————————————————————————————————————
 help: ## Outputs this help screen
