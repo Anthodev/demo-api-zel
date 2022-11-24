@@ -77,4 +77,31 @@ class UserBuilder extends BaseBuilder implements UserBaseBuilderInterface
 
         return $user;
     }
+
+    /**
+     * @param array<string, mixed> $input
+     *
+     * @throws EntityNotFoundException
+     */
+    public function populateWithRole(array $input, User $user): User
+    {
+        /** @var User $user */
+        $user = $this->populate($input, $user);
+
+        $inputRole = $input['role'] ?? null;
+
+        if (null === $inputRole) {
+            return $user;
+        }
+
+        $role = $this->roleFetcher->find($inputRole);
+
+        if (null === $role) {
+            throw new EntityNotFoundException('A role should be found.');
+        }
+
+        $user->setRole($role);
+
+        return $user;
+    }
 }

@@ -10,6 +10,7 @@ use App\Application\Common\Traits\SoftDeletableTrait;
 use App\Application\Common\Traits\TimestampableTrait;
 use App\Application\Common\Traits\UuidTrait;
 use App\Domain\User\Repository\UserRepository;
+use App\Domain\User\Validator as UserValidator;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -25,6 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks]
 #[UniqueEntity('uuid')]
 #[UniqueEntity('email')]
+#[UserValidator\AdminDemote]
 class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserInterface
 {
     use IdTrait;

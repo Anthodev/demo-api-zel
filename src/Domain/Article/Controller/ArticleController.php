@@ -212,11 +212,9 @@ class ArticleController extends AbstractApplicationController
         Article $article,
         BaseManagerInterface $baseManager,
     ): Response {
-        $this->denyAccessUnlessGranted(ArticleVoter::EDIT_STATUS);
-
         $article->setStatus(ArticleStatusEnum::DELETED->value);
 
-        $this->denyAccessUnlessGranted(ArticleVoter::EDIT_STATUS, $article);
+        $this->denyAccessUnlessGranted(ArticleVoter::DELETE, $article);
 
         $baseManager->delete($article);
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Validator;
+namespace Tests\Unit\Article\Validator;
 
 use App\Domain\Article\Enum\ArticleStatusEnum;
 use App\Domain\Article\Factory\ArticleFactory;

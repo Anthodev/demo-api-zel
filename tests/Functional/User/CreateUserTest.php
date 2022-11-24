@@ -9,6 +9,7 @@ use App\Domain\User\Enum\RoleCodeEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Tests\DataFixtures\User\UserFixtures;
 
 it('can create an user', function (): void {
     $response = $this->getObjectResponseWithNoError(
@@ -39,6 +40,51 @@ it('can create an user', function (): void {
         ->and($user->getEmail())->toBe('test@test.io')
         ->and($user->getUsername())->toBe('test')
         ->and($user->getRole()->getCode())->toBe(RoleCodeEnum::ROLE_ADMIN->value)
+    ;
+});
+
+it('can create an user while connected as admin', function (): void {
+    $this->loadBaseFixturesOnly();
+    $this->loginUser();
+
+    $response = $this->getObjectResponseWithNoError(
+        data: '
+            {
+                "email": "test@test.io",
+                "username": "test",
+                "password": "Test@1234",
+                "passwordConfirmation": "Test@1234"
+            }
+        ',
+        method: Request::METHOD_POST,
+        url: '/user/create',
+    );
+
+    expect($response->email)->toBe('test@test.io')
+        ->and($response->username)->toBe('test')
+        ->and($response->role->code)->toBe(RoleCodeEnum::ROLE_USER->value)
+    ;
+});
+
+it('cannot create an user while connected as normal user', function (): void {
+    $this->loadBaseFixturesOnly();
+    $this->loginUser(UserFixtures::USER1_USER_EMAIL);
+
+    $response = $this->getObjectResponseWithError(
+        data: '
+            {
+                "email": "test@test.io",
+                "username": "test",
+                "password": "Test@1234",
+                "passwordConfirmation": "Test@1234"
+            }
+        ',
+        method: Request::METHOD_POST,
+        url: '/user/create',
+    );
+
+    expect($response->status)->toBe(Response::HTTP_FORBIDDEN)
+        ->and($response->detail)->toBe('Access Denied.')
     ;
 });
 
