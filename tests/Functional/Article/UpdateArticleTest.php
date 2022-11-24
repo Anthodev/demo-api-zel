@@ -85,3 +85,26 @@ it('cannot update an article in published status', function (): void {
         ->and($response->detail)->toBe('Access Denied.')
     ;
 });
+
+it('cannot update an article when user logged is not the author', function (): void {
+    $this->loginUser(UserFixtures::USER1_USER_EMAIL);
+
+    $response = $this->getObjectResponseWithError(
+        data: sprintf(
+            '
+                {
+                    "title": "%s",
+                    "content": "%s"
+                }
+            ',
+            'Test title updated',
+            'Test content updated',
+        ),
+        method: Request::METHOD_PATCH,
+        url: sprintf('/article/%s/update', ArticleFixtures::ARTICLE_DRAFT_UUID),
+    );
+
+    expect($response->status)->toBe(Response::HTTP_FORBIDDEN)
+        ->and($response->detail)->toBe('Access Denied.')
+    ;
+});

@@ -35,17 +35,3 @@ it('can change article status from published to draft', function (): void {
 
     expect($response->status)->toBe(ArticleStatusEnum::DRAFT->value);
 });
-
-it('can change article status from published to deleted', function (): void {
-    $response = $this->getObjectResponseWithNoError(
-        method: Request::METHOD_DELETE,
-        url: sprintf('/article/%s/update/%s', ArticleFixtures::ARTICLE_PUBLISHED_UUID, ArticleStatusEnum::DELETED->value),
-    );
-});
-
-it('can change article status from draft to deleted', function (): void {
-    $response = $this->getObjectResponseWithNoError(
-        method: Request::METHOD_DELETE,
-        url: sprintf('/article/%s/update/%s', ArticleFixtures::ARTICLE_DRAFT_UUID, ArticleStatusEnum::DELETED->value),
-    );
-});

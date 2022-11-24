@@ -15,7 +15,7 @@ use Symfony\Component\Uid\Uuid;
 
 class ArticleFactory implements FactoryInterface
 {
-    public static function create(array $input): Article
+    public static function create(array $input = []): Article
     {
         $faker = Factory::create();
 
@@ -26,7 +26,7 @@ class ArticleFactory implements FactoryInterface
         $content = $input['content'] ?? $faker->paragraph();
 
         /** @var User $author */
-        $author = $input['author'] ?? UserFactory::create([]);
+        $author = $input['author'] ?? UserFactory::create();
 
         /** @var string $status */
         $status = $input['status'] ?? ArticleStatusEnum::DRAFT->value;
@@ -47,9 +47,7 @@ class ArticleFactory implements FactoryInterface
         $article->setPublishedAt($publishedAt);
 
         if (!isset($input['uuid'])) {
-            $uuid = Uuid::v4();
-
-            $article->setUuid($uuid);
+            $article->setUuid(Uuid::v4());
         }
 
         return $article;

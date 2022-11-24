@@ -12,7 +12,7 @@ use Symfony\Component\Uid\Uuid;
 
 class UserFactory implements FactoryInterface
 {
-    public static function create(array $input): User
+    public static function create(array $input = []): User
     {
         $faker = Factory::create();
 
@@ -39,9 +39,7 @@ class UserFactory implements FactoryInterface
         $user->setPlainPassword($password);
 
         if (!isset($input['uuid'])) {
-            $uuid = Uuid::v4();
-
-            $user->setUuid($uuid);
+            $user->setUuid(Uuid::v4());
         }
 
         return $user;

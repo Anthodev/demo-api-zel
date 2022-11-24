@@ -1,0 +1,8 @@
+App\Domain\Article\Entity\Article:
+    article_published_normal_user_1:
+        uuid: "450eb992-4949-421d-85a9-da0bb705f234"
+        title: "Article Published Fixture Normal User"
+        content: <paragraph()>
+        author: "@user1_user"
+        status: "published"
+        publishedAt: <(new \DateTime())>

@@ -6,7 +6,7 @@ namespace Tests\DataFixtures\ReferenceData\User;
 
 final class RoleFixtures
 {
-    public const ROLE_ADMIN_UUID = '8fb6a8f7-274e-4375-9611-34fecef380a5';
-    public const ROLE_USER_UUID = '8f60e38c-3c69-4708-a101-74e13ac71a5a';
-    public const ROLE_GUEST_UUID = 'ae8885fd-ad3d-4cad-bec4-8b26fcd3ceff';
+    public const ROLE_ADMIN_UUID = '28d51ef8-8646-457f-871d-bdf708bd24f';
+    public const ROLE_USER_UUID = 'f8d55ab0-abd5-42ca-b35d-63564d45730f';
+    public const ROLE_GUEST_UUID = '2e5de629-d0d6-4ae7-abeb-ab7fb0139676';
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Article\Security;
 
+use App\Application\Common\Helper\EntityInterfaceHelper;
 use App\Application\Common\Security\AbstractVoter;
 use App\Domain\Article\Entity\Article;
 use App\Domain\Article\Enum\ArticleStatusEnum;
@@ -72,8 +73,11 @@ class ArticleVoter extends AbstractVoter
         ;
     }
 
-    public function canDeleteArticle(?Article $subject, User $user): bool
+    public function canDeleteArticle(Article $subject, User $user): bool
     {
-        return $this->contextProvider->getContextUserRoleCode() === RoleCodeEnum::ROLE_ADMIN->value;
+        return
+            $this->contextProvider->getContextUserRoleCode() === RoleCodeEnum::ROLE_ADMIN->value
+            || EntityInterfaceHelper::areTheSame($subject->getAuthor(), $user)
+        ;
     }
 }
