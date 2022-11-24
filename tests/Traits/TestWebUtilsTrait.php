@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 
-trait TestUtilsTrait
+trait TestWebUtilsTrait
 {
     public function getSecurity(): Security
     {

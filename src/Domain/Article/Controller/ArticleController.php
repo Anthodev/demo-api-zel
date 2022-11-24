@@ -35,7 +35,7 @@ class ArticleController extends AbstractApplicationController
     }
 
     #[Route(
-        path: '/articles',
+        path: '/article',
         name: 'articles_list',
         methods: [Request::METHOD_GET]
     )]
@@ -46,8 +46,8 @@ class ArticleController extends AbstractApplicationController
     }
 
     #[Route(
-        path: '/articles/published',
-        name: 'articles_published_list',
+        path: '/article/published/list',
+        name: 'article_published_list',
         methods: [Request::METHOD_GET]
     )]
     public function listPublished(
@@ -57,8 +57,8 @@ class ArticleController extends AbstractApplicationController
     }
 
     #[Route(
-        path: '/articles/draft',
-        name: 'articles_draft_list',
+        path: '/article/draft/list',
+        name: 'article_draft_list',
         methods: [Request::METHOD_GET]
     )]
     public function listDrafts(
@@ -68,8 +68,8 @@ class ArticleController extends AbstractApplicationController
     }
 
     #[Route(
-        path: '/articles/author/{uuid}',
-        name: 'articles_author_list',
+        path: '/article/author/{uuid}',
+        name: 'article_author_list',
         methods: [Request::METHOD_GET]
     )]
     public function listForAuthor(
@@ -85,7 +85,7 @@ class ArticleController extends AbstractApplicationController
      * @throws \JsonException
      */
     #[Route(
-        path: '/article/new',
+        path: '/article',
         name: 'article_new',
         methods: [Request::METHOD_POST]
     )]
@@ -122,7 +122,7 @@ class ArticleController extends AbstractApplicationController
      * @throws \JsonException
      */
     #[Route(
-        path: '/article/{uuid}/update',
+        path: '/article/{uuid}',
         name: 'article_update',
         methods: [Request::METHOD_PATCH]
     )]
@@ -164,7 +164,7 @@ class ArticleController extends AbstractApplicationController
     }
 
     #[Route(
-        path: '/article/{uuid}/update/draft',
+        path: '/article/{uuid}/draft',
         name: 'article_update_status_draft',
         methods: [Request::METHOD_PATCH]
     )]
@@ -184,7 +184,7 @@ class ArticleController extends AbstractApplicationController
     }
 
     #[Route(
-        path: '/article/{uuid}/update/published',
+        path: '/article/{uuid}/published',
         name: 'article_update_status_published',
         methods: [Request::METHOD_PATCH]
     )]
@@ -204,7 +204,7 @@ class ArticleController extends AbstractApplicationController
     }
 
     #[Route(
-        path: '/article/{uuid}/update/deleted',
+        path: '/article/{uuid}/deleted',
         name: 'article_update_status_deleted',
         methods: [Request::METHOD_DELETE]
     )]

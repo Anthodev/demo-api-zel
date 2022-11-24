@@ -61,7 +61,7 @@ class UserController extends AbstractApplicationController
      * @throws InvalidArgumentException
      */
     #[Route(
-        path: '/user/create',
+        path: '/user',
         name: 'user_create',
         methods: [Request::METHOD_POST]
     )]
@@ -112,7 +112,7 @@ class UserController extends AbstractApplicationController
      * @throws \JsonException
      */
     #[Route(
-        path: '/user/{uuid}/update',
+        path: '/user/{uuid}',
         name: 'user_update',
         methods: [Request::METHOD_PATCH]
     )]
@@ -147,7 +147,7 @@ class UserController extends AbstractApplicationController
     }
 
     #[Route(
-        path: '/user/{uuid}/delete',
+        path: '/user/{uuid}',
         name: 'user_delete',
         methods: [Request::METHOD_DELETE]
     )]

@@ -16,14 +16,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Tests\DataFixtures\User\UserFixtures;
 use Tests\Traits\AliceLoaderTrait;
-use Tests\Traits\TestUtilsTrait;
+use Tests\Traits\TestWebUtilsTrait;
 
 use function json_decode;
 
 class AppWebTestCase extends WebTestCase
 {
     use AliceLoaderTrait;
-    use TestUtilsTrait;
+    use TestWebUtilsTrait;
 
     protected static ?KernelBrowser $client;
     protected static string $uri = '/api';

@@ -31,7 +31,7 @@ it('can create an article', function (): void {
             'Test content',
         ),
         method: Request::METHOD_POST,
-        url: '/article/new',
+        url: '/article',
     );
 
     /** @var EntityManagerInterface $entityManager */
@@ -62,12 +62,13 @@ it('cannot create an article without title', function (): void {
             'Test content',
         ),
         method: Request::METHOD_POST,
-        url: '/article/new',
+        url: '/article',
     );
 
-    expect($response->status)
+    expect($response)
+        ->status
         ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
-        ->and($response->detail)->toContain('This value is too long. It should have 128 characters or less.')
+        ->detail->toContain('This value is too long. It should have 128 characters or less.')
     ;
 });
 
@@ -82,12 +83,12 @@ it('cannot create an article with a too long title', function (): void {
             'Test content',
         ),
         method: Request::METHOD_POST,
-        url: '/article/new',
+        url: '/article',
     );
 
-    expect($response->status)
-        ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
-        ->and($response->detail)->toContain('This value should not be blank.')
+    expect($response)
+        ->status->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
+        ->detail->toContain('This value should not be blank.')
     ;
 });
 
@@ -102,12 +103,12 @@ it('cannot create an article without content', function (): void {
             'Test title',
         ),
         method: Request::METHOD_POST,
-        url: '/article/new',
+        url: '/article',
     );
 
-    expect($response->status)
-        ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
-        ->and($response->detail)->toContain('This value should not be blank.')
+    expect($response)
+        ->status->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
+        ->detail->toContain('This value should not be blank.')
     ;
 });
 
@@ -126,12 +127,12 @@ it('cannot create an article with a non existing author', function (): void {
             '477d4e58-4387-4147-8f34-b3df7c1f0111'
         ),
         method: Request::METHOD_POST,
-        url: '/article/new',
+        url: '/article',
     );
 
-    expect($response->status)
-        ->toBe(Response::HTTP_NOT_FOUND)
-        ->and($response->detail)->toContain('Author not found')
+    expect($response)
+        ->status->toBe(Response::HTTP_NOT_FOUND)
+        ->detail->toContain('Author not found')
     ;
 });
 
@@ -152,12 +153,12 @@ it('cannot create an article with a future date on published status', function (
             (new \DateTime('+1 day'))->format('Y-m-d H:i:s'),
         ),
         method: Request::METHOD_POST,
-        url: '/article/new',
+        url: '/article',
     );
 
-    expect($response->status)
-        ->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
-        ->and($response->detail)
+    expect($response)
+        ->status->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
+        ->detail
             ->toContain(
                 'You cannot set a future date for article in published status',
                 ArticlePublishedDateStatus::ARTICLE_PUBLISHED_DATE_STATUS_ERROR_CODE

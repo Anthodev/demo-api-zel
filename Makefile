@@ -41,10 +41,6 @@ prune: stop
 serve:
 	$(DOCKER) symfony serve -d
 
-run:
-	$(DOCKER) symfony serve -d
-	$(DOCKER) vite
-
 install-project: install reset-database generate-jwt ## First installation for setup the project
 
 update-project: install reset-database ## update the project after a checkout on another branch or to reset the state of the project
