@@ -57,12 +57,13 @@ it('can create an user while connected as admin', function (): void {
             }
         ',
         method: Request::METHOD_POST,
-        url: '/user/create',
+        url: '/user',
     );
 
-    expect($response->email)->toBe('test@test.io')
-        ->and($response->username)->toBe('test')
-        ->and($response->role->code)->toBe(RoleCodeEnum::ROLE_USER->value)
+    expect($response)
+        ->email->toBe('test@test.io')
+        ->username->toBe('test')
+        ->role->code->toBe(RoleCodeEnum::ROLE_USER->value)
     ;
 });
 
@@ -80,11 +81,12 @@ it('cannot create an user while connected as normal user', function (): void {
             }
         ',
         method: Request::METHOD_POST,
-        url: '/user/create',
+        url: '/user',
     );
 
-    expect($response->status)->toBe(Response::HTTP_FORBIDDEN)
-        ->and($response->detail)->toBe('Access Denied.')
+    expect($response)
+        ->status->toBe(Response::HTTP_FORBIDDEN)
+        ->detail->toBe('Access Denied.')
     ;
 });
 
@@ -104,8 +106,9 @@ it('cannot create an existing user', function (): void {
         url: '/register',
     );
 
-    expect($response->status)->toBe(Response::HTTP_BAD_REQUEST)
-        ->and($response->detail)->toBe('User already exists')
+    expect($response)
+        ->status->toBe(Response::HTTP_BAD_REQUEST)
+        ->detail->toBe('User already exists')
     ;
 });
 
@@ -122,8 +125,9 @@ it('cannot create a user without an email', function (): void {
         url: '/register',
     );
 
-    expect($response->status)->toBe(Response::HTTP_BAD_REQUEST)
-        ->and($response->detail)->toBe('The email, username and password cannot be null.')
+    expect($response)
+        ->status->toBe(Response::HTTP_BAD_REQUEST)
+        ->detail->toBe('The email, username and password cannot be null.')
     ;
 });
 
@@ -140,8 +144,9 @@ it('cannot create a user without an username', function (): void {
         url: '/register',
     );
 
-    expect($response->status)->toBe(Response::HTTP_BAD_REQUEST)
-        ->and($response->detail)->toBe('The email, username and password cannot be null.')
+    expect($response)
+        ->status->toBe(Response::HTTP_BAD_REQUEST)
+        ->detail->toBe('The email, username and password cannot be null.')
     ;
 });
 
@@ -157,8 +162,9 @@ it('cannot create a user without a password', function (): void {
         url: '/register',
     );
 
-    expect($response->status)->toBe(Response::HTTP_BAD_REQUEST)
-        ->and($response->detail)->toBe('The email, username and password cannot be null.')
+    expect($response)
+        ->status->toBe(Response::HTTP_BAD_REQUEST)
+        ->detail->toBe('The email, username and password cannot be null.')
     ;
 });
 
@@ -176,7 +182,8 @@ it('cannot create a user with a non matching password confirmation', function ()
         url: '/register',
     );
 
-    expect($response->status)->toBe(Response::HTTP_BAD_REQUEST)
-        ->and($response->detail)->toBe('Password confirmation does not match')
+    expect($response)
+        ->status->toBe(Response::HTTP_BAD_REQUEST)
+        ->detail->toBe('Password confirmation does not match')
     ;
 });

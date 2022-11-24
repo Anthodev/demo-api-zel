@@ -28,12 +28,13 @@ it('can update myself', function (): void {
             'updated@test.io',
         ),
         method: Request::METHOD_PATCH,
-        url: sprintf('/user/%s/update', UserFixtures::USER_ADMIN_UUID),
+        url: sprintf('/user/%s', UserFixtures::USER_ADMIN_UUID),
     );
 
-    expect($response->username)->toBe('Updated')
-        ->and($response->email)->toBe('updated@test.io')
-        ->and($response->role->code)->toBe(RoleCodeEnum::ROLE_ADMIN->value)
+    expect($response)
+        ->username->toBe('Updated')
+        ->email->toBe('updated@test.io')
+        ->role->code->toBe(RoleCodeEnum::ROLE_ADMIN->value)
     ;
 });
 
@@ -50,11 +51,12 @@ it('can update another user', function (): void {
             'updated@test.io',
         ),
         method: Request::METHOD_PATCH,
-        url: sprintf('/user/%s/update', UserFixtures::USER1_USER_UUID),
+        url: sprintf('/user/%s', UserFixtures::USER1_USER_UUID),
     );
 
-    expect($response->username)->toBe('Updated')
-        ->and($response->email)->toBe('updated@test.io')
+    expect($response)
+        ->username->toBe('Updated')
+        ->email->toBe('updated@test.io')
     ;
 });
 
@@ -73,11 +75,12 @@ it('can update myself from normal user', function (): void {
             'updated@test.io',
         ),
         method: Request::METHOD_PATCH,
-        url: sprintf('/user/%s/update', UserFixtures::USER1_USER_UUID),
+        url: sprintf('/user/%s', UserFixtures::USER1_USER_UUID),
     );
 
-    expect($response->username)->toBe('Updated')
-        ->and($response->email)->toBe('updated@test.io')
+    expect($response)
+        ->username->toBe('Updated')
+        ->email->toBe('updated@test.io')
     ;
 });
 
@@ -96,11 +99,12 @@ it('cannot update another user when normal user', function (): void {
             'updated@test.io',
         ),
         method: Request::METHOD_PATCH,
-        url: sprintf('/user/%s/update', UserFixtures::USER_ADMIN_UUID),
+        url: sprintf('/user/%s', UserFixtures::USER_ADMIN_UUID),
     );
 
-    expect($response->status)->toBe(Response::HTTP_FORBIDDEN)
-        ->and($response->detail)->toBe('Access Denied.')
+    expect($response)
+        ->status->toBe(Response::HTTP_FORBIDDEN)
+        ->detail->toBe('Access Denied.')
     ;
 });
 
@@ -115,12 +119,13 @@ it('cannot demote an admin when no admin left', function (): void {
             RoleFixtures::ROLE_USER_UUID
         ),
         method: Request::METHOD_PATCH,
-        url: sprintf('/user/%s/update', UserFixtures::USER_ADMIN_UUID),
+        url: sprintf('/user/%s', UserFixtures::USER_ADMIN_UUID),
     );
 
-    expect($response->status)->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
-        ->and($response->detail)
-        ->toContain('You cannot demote yourself without another admin.')
-        ->toContain('01592fb9-a6ed-4577-950e-09d093f1468f')
+    expect($response)
+        ->status->toBe(Response::HTTP_UNPROCESSABLE_ENTITY)
+        ->detail
+            ->toContain('You cannot demote yourself without another admin.')
+            ->toContain('01592fb9-a6ed-4577-950e-09d093f1468f')
     ;
 });

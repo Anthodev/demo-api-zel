@@ -17,7 +17,7 @@ it('can delete myself', function (): void {
 
     $this->getObjectResponseWithNoError(
         method: Request::METHOD_DELETE,
-        url: sprintf('/user/%s/delete', UserFixtures::USER_ADMIN_UUID),
+        url: sprintf('/user/%s', UserFixtures::USER_ADMIN_UUID),
     );
 });
 
@@ -26,7 +26,7 @@ it('can delete another user', function (): void {
 
     $this->getObjectResponseWithNoError(
         method: Request::METHOD_DELETE,
-        url: sprintf('/user/%s/delete', UserFixtures::USER1_USER_UUID),
+        url: sprintf('/user/%s', UserFixtures::USER1_USER_UUID),
     );
 });
 
@@ -35,7 +35,7 @@ it('can delete myself from normal user', function (): void {
 
     $this->getObjectResponseWithNoError(
         method: Request::METHOD_DELETE,
-        url: sprintf('/user/%s/delete', UserFixtures::USER1_USER_UUID),
+        url: sprintf('/user/%s', UserFixtures::USER1_USER_UUID),
     );
 });
 
@@ -44,10 +44,11 @@ it('cannot delete another user as normal user', function (): void {
 
     $response = $this->getObjectResponseWithError(
         method: Request::METHOD_DELETE,
-        url: sprintf('/user/%s/delete', UserFixtures::USER_ADMIN_UUID),
+        url: sprintf('/user/%s', UserFixtures::USER_ADMIN_UUID),
     );
 
-    expect($response->status)->toBe(Response::HTTP_FORBIDDEN)
-        ->and($response->detail)->toBe('Access Denied.')
+    expect($response)
+        ->status->toBe(Response::HTTP_FORBIDDEN)
+        ->detail->toBe('Access Denied.')
     ;
 });

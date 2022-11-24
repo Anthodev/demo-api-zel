@@ -18,14 +18,16 @@ it('can get myself', function (): void {
         url: '/user/me',
     );
 
-    expect($response->uuid)->toBe(UserFixtures::USER_ADMIN_UUID)
-        ->and($response->email)->toBe(UserFixtures::USER_ADMIN_EMAIL)
-        ->and($response->username)->toBe(UserFixtures::USER_ADMIN_USERNAME)
-        ->and($response->role->code)->toBe(RoleCodeEnum::ROLE_ADMIN->value)
-        ->and($response)->not->toHaveProperty('id')
-        ->and($response)->not->toHaveProperty('password')
-        ->and($response)->not->toHaveProperty('created_at')
-        ->and($response)->not->toHaveProperty('updated_at')
+    expect($response)
+        ->uuid->toBe(UserFixtures::USER_ADMIN_UUID)
+        ->email->toBe(UserFixtures::USER_ADMIN_EMAIL)
+        ->username->toBe(UserFixtures::USER_ADMIN_USERNAME)
+        ->role->code
+            ->toBe(RoleCodeEnum::ROLE_ADMIN->value)
+            ->not->toHaveProperty('id')
+            ->not->toHaveProperty('password')
+            ->not->toHaveProperty('created_at')
+            ->not->toHaveProperty('updated_at')
     ;
 });
 
@@ -36,14 +38,16 @@ it('can get another user', function (): void {
         url: '/user/' . UserFixtures::USER1_USER_UUID,
     );
 
-    expect($response->uuid)->toBe(UserFixtures::USER1_USER_UUID)
-        ->and($response->email)->toBe(UserFixtures::USER1_USER_EMAIL)
-        ->and($response->username)->toBe(UserFixtures::USER1_USER_USERNAME)
-        ->and($response->role->code)->toBe(RoleCodeEnum::ROLE_USER->value)
-        ->and($response)->not->toHaveProperty('id')
-        ->and($response)->not->toHaveProperty('password')
-        ->and($response)->not->toHaveProperty('created_at')
-        ->and($response)->not->toHaveProperty('updated_at')
+    expect($response)
+        ->uuid->toBe(UserFixtures::USER1_USER_UUID)
+        ->email->toBe(UserFixtures::USER1_USER_EMAIL)
+        ->username->toBe(UserFixtures::USER1_USER_USERNAME)
+        ->role->code
+            ->toBe(RoleCodeEnum::ROLE_USER->value)
+            ->not->toHaveProperty('id')
+            ->not->toHaveProperty('password')
+            ->not->toHaveProperty('created_at')
+            ->not->toHaveProperty('updated_at')
     ;
 });
 

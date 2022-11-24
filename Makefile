@@ -19,7 +19,10 @@ ifeq ($(isContainerRunning), 1)
 endif
 
 ## —— App ————————————————————————————————————————————————————————————————
-build-docker:
+network:
+	@docker network create zel_network || true
+
+build-docker: env network
 	@docker-compose pull --ignore-pull-failures
 	@docker-compose build --no-cache
 
@@ -27,6 +30,8 @@ up:
 	@echo "Launching containers from project..."
 	$(DOCKER_COMPOSE) up -d
 	$(DOCKER_COMPOSE) ps
+
+build-up: build-docker up
 
 stop:
 	@echo "Stopping containers from project..."
@@ -41,9 +46,8 @@ prune: stop
 serve:
 	$(DOCKER) symfony serve -d
 
-run:
-	$(DOCKER) symfony serve -d
-	$(DOCKER) vite
+bash:
+	@docker exec -it $(containerName) bash
 
 install-project: install reset-database generate-jwt ## First installation for setup the project
 
@@ -55,7 +59,7 @@ sync: update-project test-all ## Synchronize the project with the current branch
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?## .*$$)|(^## )' Makefile | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
-## —— Env ——————————————————————————————————————————————————————————————————————
+## —— Utils ——————————————————————————————————————————————————————————————————————
 env:
 	cp .env.dist .env
 

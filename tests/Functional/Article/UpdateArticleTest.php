@@ -33,16 +33,17 @@ it('can update an article', function (): void {
             'Test content updated',
         ),
         method: Request::METHOD_PATCH,
-        url: sprintf('/article/%s/update', ArticleFixtures::ARTICLE_DRAFT_UUID),
+        url: sprintf('/article/%s', ArticleFixtures::ARTICLE_DRAFT_UUID),
     );
 
-    expect($response->title)->toBe('Test title updated')
-        ->and($response->content)->toBe('Test content updated')
-        ->and($response->status)->toBe(ArticleStatusEnum::DRAFT->value)
-        ->and($response->publishedAt)->not->toBeNull()
-        ->and($response->author->uuid)->toBe(UserFixtures::USER_ADMIN_UUID)
-        ->and($response->author->username)->toBe(UserFixtures::USER_ADMIN_USERNAME)
-        ->and($response->author->email)->toBe(UserFixtures::USER_ADMIN_EMAIL)
+    expect($response)
+        ->title->toBe('Test title updated')
+        ->content->toBe('Test content updated')
+        ->status->toBe(ArticleStatusEnum::DRAFT->value)
+        ->publishedAt->not->toBeNull()
+        ->author->uuid->toBe(UserFixtures::USER_ADMIN_UUID)
+        ->author->username->toBe(UserFixtures::USER_ADMIN_USERNAME)
+        ->author->email->toBe(UserFixtures::USER_ADMIN_EMAIL)
     ;
 });
 
@@ -57,11 +58,12 @@ it('cannot update the status of an article', function (): void {
             ArticleStatusEnum::PUBLISHED->value,
         ),
         method: Request::METHOD_PATCH,
-        url: sprintf('/article/%s/update', ArticleFixtures::ARTICLE_DRAFT_UUID),
+        url: sprintf('/article/%s', ArticleFixtures::ARTICLE_DRAFT_UUID),
     );
 
-    expect($response->status)->toBe(Response::HTTP_BAD_REQUEST)
-        ->and($response->detail)->toBe('You cannot update only the status with this endpoint')
+    expect($response)
+        ->status->toBe(Response::HTTP_BAD_REQUEST)
+        ->detail->toBe('You cannot update only the status with this endpoint')
     ;
 });
 
@@ -78,11 +80,12 @@ it('cannot update an article in published status', function (): void {
             'Test content updated',
         ),
         method: Request::METHOD_PATCH,
-        url: sprintf('/article/%s/update', ArticleFixtures::ARTICLE_PUBLISHED_UUID),
+        url: sprintf('/article/%s', ArticleFixtures::ARTICLE_PUBLISHED_UUID),
     );
 
-    expect($response->status)->toBe(Response::HTTP_FORBIDDEN)
-        ->and($response->detail)->toBe('Access Denied.')
+    expect($response)
+        ->status->toBe(Response::HTTP_FORBIDDEN)
+        ->detail->toBe('Access Denied.')
     ;
 });
 
@@ -101,10 +104,11 @@ it('cannot update an article when user logged is not the author', function (): v
             'Test content updated',
         ),
         method: Request::METHOD_PATCH,
-        url: sprintf('/article/%s/update', ArticleFixtures::ARTICLE_DRAFT_UUID),
+        url: sprintf('/article/%s', ArticleFixtures::ARTICLE_DRAFT_UUID),
     );
 
-    expect($response->status)->toBe(Response::HTTP_FORBIDDEN)
-        ->and($response->detail)->toBe('Access Denied.')
+    expect($response)
+        ->status->toBe(Response::HTTP_FORBIDDEN)
+        ->detail->toBe('Access Denied.')
     ;
 });

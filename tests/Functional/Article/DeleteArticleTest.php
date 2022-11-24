@@ -23,7 +23,7 @@ it('can change article status from published to deleted', function (): void {
 
     $this->getObjectResponseWithNoError(
         method: Request::METHOD_DELETE,
-        url: sprintf('/article/%s/update/%s', ArticleFixtures::ARTICLE_PUBLISHED_UUID, ArticleStatusEnum::DELETED->value),
+        url: sprintf('/article/%s/%s', ArticleFixtures::ARTICLE_PUBLISHED_UUID, ArticleStatusEnum::DELETED->value),
     );
 });
 
@@ -32,7 +32,7 @@ it('can change article status from draft to deleted', function (): void {
 
     $this->getObjectResponseWithNoError(
         method: Request::METHOD_DELETE,
-        url: sprintf('/article/%s/update/%s', ArticleFixtures::ARTICLE_DRAFT_UUID, ArticleStatusEnum::DELETED->value),
+        url: sprintf('/article/%s/%s', ArticleFixtures::ARTICLE_DRAFT_UUID, ArticleStatusEnum::DELETED->value),
     );
 });
 
@@ -41,7 +41,7 @@ it('can delete an article when im the author', function (): void {
 
     $this->getObjectResponseWithNoError(
         method: Request::METHOD_DELETE,
-        url: sprintf('/article/%s/update/%s', ArticleFixtures::ARTICLE_DRAFT_UUID, ArticleStatusEnum::DELETED->value),
+        url: sprintf('/article/%s/%s', ArticleFixtures::ARTICLE_DRAFT_UUID, ArticleStatusEnum::DELETED->value),
     );
 });
 
@@ -57,7 +57,7 @@ it('can delete an article when im the author as normal user', function (): void 
 
     $this->getObjectResponseWithNoError(
         method: Request::METHOD_DELETE,
-        url: sprintf('/article/%s/update/%s', '450eb992-4949-421d-85a9-da0bb705f234', ArticleStatusEnum::DELETED->value),
+        url: sprintf('/article/%s/%s', '450eb992-4949-421d-85a9-da0bb705f234', ArticleStatusEnum::DELETED->value),
     );
 });
 
@@ -66,10 +66,11 @@ it('cannot delete an article from another user', function (): void {
 
     $response = $this->getObjectResponseWithError(
         method: Request::METHOD_DELETE,
-        url: sprintf('/article/%s/update/%s', ArticleFixtures::ARTICLE_DRAFT_UUID, ArticleStatusEnum::DELETED->value),
+        url: sprintf('/article/%s/%s', ArticleFixtures::ARTICLE_DRAFT_UUID, ArticleStatusEnum::DELETED->value),
     );
 
-    expect($response->status)->toBe(Response::HTTP_FORBIDDEN)
-        ->and($response->detail)->toBe('Access Denied.')
+    expect($response)
+        ->status->toBe(Response::HTTP_FORBIDDEN)
+        ->detail->toBe('Access Denied.')
     ;
 });

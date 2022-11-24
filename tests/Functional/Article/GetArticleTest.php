@@ -23,19 +23,20 @@ it('can get an article', function (): void {
         url: sprintf('/article/%s', ArticleFixtures::ARTICLE_DRAFT_UUID),
     );
 
-    expect($response->title)->toBe('Article Draft Fixture')
-        ->and($response->content)->toBeString()
-        ->and($response->status)->toBe(ArticleStatusEnum::DRAFT->value)
-        ->and($response->publishedAt)->not->toBeNull()
-        ->and($response->author->uuid)->toBe(UserFixtures::USER_ADMIN_UUID)
-        ->and($response->author->username)->toBe(UserFixtures::USER_ADMIN_USERNAME)
-        ->and($response->author->email)->toBe(UserFixtures::USER_ADMIN_EMAIL)
+    expect($response)
+        ->title->toBe('Article Draft Fixture')
+        ->content->toBeString()
+        ->status->toBe(ArticleStatusEnum::DRAFT->value)
+        ->publishedAt->not->toBeNull()
+        ->author->uuid->toBe(UserFixtures::USER_ADMIN_UUID)
+        ->author->username->toBe(UserFixtures::USER_ADMIN_USERNAME)
+        ->author->email->toBe(UserFixtures::USER_ADMIN_EMAIL)
     ;
 });
 
 it('can get a list of articles', function (): void {
     $response = $this->getArrayResponseWithNoError(
-        url: '/articles',
+        url: '/article',
     );
 
     expect(count($response))->not->toBe(3)
@@ -59,7 +60,7 @@ it('can get a list of articles', function (): void {
 
 it('can get list of published articles', function (): void {
     $response = $this->getArrayResponseWithNoError(
-        url: '/articles/published',
+        url: '/article/published/list',
     );
 
     expect(count($response))->toBe(1)
@@ -75,7 +76,7 @@ it('can get list of published articles', function (): void {
 
 it('can get list of draft articles', function (): void {
     $response = $this->getArrayResponseWithNoError(
-        url: '/articles/draft',
+        url: '/article/draft/list',
     );
 
     expect(count($response))->toBe(1)
@@ -91,7 +92,7 @@ it('can get list of draft articles', function (): void {
 
 it('can get list of articles by author', function (): void {
     $response = $this->getArrayResponseWithNoError(
-        url: sprintf('/articles/author/%s', UserFixtures::USER_ADMIN_UUID),
+        url: sprintf('/article/author/%s', UserFixtures::USER_ADMIN_UUID),
     );
 
     expect(count($response))->toBe(2)

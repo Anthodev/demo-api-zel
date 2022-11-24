@@ -9,17 +9,9 @@ use App\Application\Common\Service\EntityValidationService;
 use App\Domain\User\Entity\Role;
 use App\Domain\User\Entity\User;
 use App\Domain\User\Enum\RoleCodeEnum;
-use App\Domain\User\Factory\RoleFactoy;
-use App\Domain\User\Factory\UserFactory;
-use App\Domain\User\Fetcher\RoleFetcher;
-use App\Domain\User\Fetcher\UserFetcher;
-use App\Domain\User\Validator\AdminDemote;
-use App\Domain\User\Validator\AdminDemoteValidator;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\UnitOfWork;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Serializer\SerializerInterface;
 use Tests\DataFixtures\User\UserFixtures;
 use Tests\Traits\AliceLoaderTrait;
 
