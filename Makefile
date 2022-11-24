@@ -20,9 +20,9 @@ endif
 
 ## —— App ————————————————————————————————————————————————————————————————
 network:
-	@docker network create zel-network
+	@docker network create zel_network
 
-build-docker:
+build-docker: env network
 	@docker-compose pull --ignore-pull-failures
 	@docker-compose build --no-cache
 
@@ -31,7 +31,7 @@ up:
 	$(DOCKER_COMPOSE) up -d
 	$(DOCKER_COMPOSE) ps
 
-up-all: network up
+build-up: build-docker up reset-permissions install-project
 
 stop:
 	@echo "Stopping containers from project..."
@@ -52,11 +52,15 @@ update-project: install reset-database ## update the project after a checkout on
 
 sync: update-project test-all ## Synchronize the project with the current branch, install composer dependencies, drop DB and run all migrations, fixtures and all test
 
+reset-permissions:
+	$(DOCKER) chown -R $(user):$(group) ./var
+	$(DOCKER) chown -R $(user):$(group) ./vendor
+
 ## —— 🐝 The Symfony Makefile 🐝 ——————————————————————————————————————————————
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?## .*$$)|(^## )' Makefile | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
-## —— Env ——————————————————————————————————————————————————————————————————————
+## —— Utils ——————————————————————————————————————————————————————————————————————
 env:
 	cp .env.dist .env
 
